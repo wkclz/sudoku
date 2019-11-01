@@ -103,6 +103,7 @@ public class OnlyYou {
         int r = 0;
         int d = 0;
 
+        // 行
         if (i < 3){
             u = 0;
             d = 2;
@@ -116,15 +117,16 @@ public class OnlyYou {
             d = 8;
         }
 
+        // 列
         if (j < 3){
             l = 0;
             r = 2;
         }
-        if (3 <= i && i < 6){
+        if (3 <= j && j < 6){
             l = 3;
             r = 5;
         }
-        if (6 <= i){
+        if (6 <= j){
             l = 6;
             r = 8;
         }

@@ -70,7 +70,7 @@ public class OnlyOnePossibility {
                     Set<Integer> list = new HashSet<Integer>(){{add(1);add(2);add(3);add(4);add(5);add(6);add(7);add(8);add(9);}};
                     list.removeAll(nums);
                     sudoku[i][j] = list.stream().collect(Collectors.toList()).get(0);
-                    System.out.println("第 "+ i +" 行,第 "+j+" 列为 " + sudoku[i][j]);
+                    System.out.println("多区间唯一可能：第 "+ i +" 行,第 "+j+" 列为 " + sudoku[i][j]);
                     count ++;
                 }
                 nums.clear();

@@ -88,7 +88,7 @@ public class OnlyYou {
             return 0;
         }
 
-        System.out.println("第 "+ i +" 行,第 "+j+" 列为 " + sudoku[i][j]);
+        System.out.println("单区间唯一确定：第 "+ i +" 行,第 "+j+" 列为 " + sudoku[i][j]);
         return 1;
     }
 

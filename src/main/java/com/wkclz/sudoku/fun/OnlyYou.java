@@ -2,6 +2,7 @@ package com.wkclz.sudoku.fun;
 
 
 import com.wkclz.sudoku.utils.Print;
+import com.wkclz.sudoku.utils.Range;
 
 /**
  * 一行/列/阵上只差一个值
@@ -10,23 +11,26 @@ public class OnlyYou {
 
 
     private static int[][] sudoku = {
-            {1,2,3,  4,0,6,   7,8,9},
-            {9,0,0,  0,0,0,   0,0,0},
-            {8,0,0,  0,0,0,   0,0,0},
+        {1,2,3,  4,0,6,   7,8,9},
+        {9,0,0,  0,0,0,   0,0,0},
+        {8,0,0,  0,0,0,   0,0,0},
 
-            {7,0,0,  0,0,0,   0,0,0},
-            {0,0,0,  0,0,0,   0,0,0},
-            {5,0,0,  0,0,0,   0,0,0},
+        {7,0,0,  0,0,0,   0,0,0},
+        {0,0,0,  0,0,0,   0,0,0},
+        {5,0,0,  0,0,0,   0,0,0},
 
-            {4,0,0,  0,0,0,   5,4,3},
-            {3,0,0,  0,0,0,   6,9,2},
-            {2,0,0,  0,0,0,   0,8,1},
+        {4,0,0,  0,0,0,   5,4,3},
+        {3,0,0,  0,0,0,   6,9,2},
+        {2,0,0,  0,0,0,   0,8,1},
     };
+    // sudoku[0][4] = 5
+    // sudoku[4][0] = 6
+    // sudoku[8][6] = 7
 
     public static void main(String[] args) {
         Print.printSudoku(sudoku);
-        // 最简单的算法：唯一法
-        OnlyYou.onlyYou(sudoku);
+        int onlyYou = OnlyYou.handle(sudoku);
+        System.out.println("计算出 " + onlyYou + " 个数");
         Print.printSudoku(sudoku);
     }
 
@@ -38,15 +42,17 @@ public class OnlyYou {
      * 遍历要执行的数据
      * @param sudoku
      */
-    public static void onlyYou(int[][] sudoku){
+    public static int handle(int[][] sudoku){
+        int count = 0;
         for (int i = 0; i < sudoku.length; i++) {
             int[] ku = sudoku[i];
             for (int j = 0; j < ku.length; j++) {
-                calc(sudoku, getRowRange(i, j), i, j);
-                calc(sudoku, getCloumnRange(i, j), i, j);
-                calc(sudoku, getPalaceRange(i, j), i, j);
+                count += calc(sudoku, Range.getRowRange(i, j), i, j);
+                count += calc(sudoku, Range.getCloumnRange(i, j), i, j);
+                count += calc(sudoku, Range.getPalaceRange(i, j), i, j);
             }
         }
+        return count;
     }
 
     /**
@@ -56,10 +62,10 @@ public class OnlyYou {
      * @param i
      * @param j
      */
-    private static void calc(int[][] sudoku,  int[] range, int i, int j){
+    private static int calc(int[][] sudoku,  int[] range, int i, int j){
         int cell = sudoku[i][j];
         if (cell != 0){
-            return;
+            return 0;
         }
         int count = 511;
 
@@ -77,64 +83,14 @@ public class OnlyYou {
         // 0所在位置，恰好为0的n 次幂，则成功，否则仍然是0
         int power = getPower(count);
         sudoku[i][j] = power + 1;
+
+        if (power == -1){
+            return 0;
+        }
+
+        System.out.println("第 "+ i +" 行,第 "+j+" 列为 " + sudoku[i][j]);
+        return 1;
     }
-
-
-    /**
-     * 获取行扫描的左上右下
-     */
-    private static int[] getRowRange(int i, int j){
-        int[] range = {0, i, 8, i};
-        return range;
-    }
-    /**
-     * 获取列扫描的左上右下
-     */
-    private static int[] getCloumnRange(int i, int j){
-        int[] range = {j, 0, j, 8};
-        return range;
-    }
-    /**
-     * 获取9宫扫描的左上右下
-     */
-    private static int[] getPalaceRange(int i, int j){
-        int l = 0;
-        int u = 0;
-        int r = 0;
-        int d = 0;
-
-        // 行
-        if (i < 3){
-            u = 0;
-            d = 2;
-        }
-        if (3 <= i && i < 6){
-            u = 3;
-            d = 5;
-        }
-        if (6 <= i){
-            u = 6;
-            d = 8;
-        }
-
-        // 列
-        if (j < 3){
-            l = 0;
-            r = 2;
-        }
-        if (3 <= j && j < 6){
-            l = 3;
-            r = 5;
-        }
-        if (6 <= j){
-            l = 6;
-            r = 8;
-        }
-
-        int[] range = {l, u, r, d};
-        return range;
-    }
-
 
 
     // 获取幂
